@@ -1,0 +1,10 @@
+# evomedia.net evo.polaris-app — https://github.com/evomedia-net/evo.polaris-app
+# Created by Kelly Michels · dev@evomedia.net
+# Licensed under the MIT License. See LICENSE.
+
+# LF in the repository: gradlew and the .txt twins break on CRLF.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary
+*.jar binary
+*.jks binary
