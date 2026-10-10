@@ -1,0 +1,16 @@
+{
+  "appId": "net.evomedia.polaris",
+  "appName": "evo.polaris",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  },
+  "ios": {
+    "contentInset": "never"
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "DARK"
+    }
+  }
+}

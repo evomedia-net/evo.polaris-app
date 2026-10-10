@@ -1,0 +1,33 @@
+{
+  "name": "evo-polaris-app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Play Store and App Store builds of evo.polaris: the released web app, bundled offline inside a Capacitor shell.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Kelly Michels <dev@evomedia.net> (https://evomedia.net)",
+  "homepage": "https://polaris.evomedia.net",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evomedia-net/evo.polaris-app.git"
+  },
+  "polaris": {
+    "version": "0.0.1.0.61"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\"",
+    "fetch-site": "node scripts/fetch-site.mjs",
+    "sync": "node scripts/fetch-site.mjs && cap sync",
+    "docs:twins": "node scripts/md-txt.mjs",
+    "docs:check": "node scripts/md-txt.mjs --check"
+  },
+  "dependencies": {
+    "@capacitor-community/text-to-speech": "8.0.2",
+    "@capacitor/android": "8.5.3",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/ios": "8.5.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.3"
+  }
+}

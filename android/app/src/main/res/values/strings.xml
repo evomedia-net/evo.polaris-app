@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">evo.polaris</string>
+    <string name="title_activity_main">evo.polaris</string>
+    <string name="package_name">net.evomedia.polaris</string>
+    <string name="custom_url_scheme">net.evomedia.polaris</string>
+</resources>
