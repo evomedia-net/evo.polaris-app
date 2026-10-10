@@ -1,0 +1,46 @@
+# evomedia.net evo.polaris-app — https://github.com/evomedia-net/evo.polaris-app
+# Created by Kelly Michels · dev@evomedia.net
+# Licensed under the MIT License. See LICENSE.
+
+# An iOS app can only be compiled on a Mac, and there is no Mac here, so this
+# is where the iOS app is built: GitHub's macOS runner, free for a public
+# repo. It builds for the simulator with signing off, which proves the
+# project, the Swift packages and the bundled polaris all compile. A signed
+# App Store build needs Apple Developer credentials as repo secrets.
+name: ios
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run fetch-site
+      - run: npx cap sync ios
+      - name: Build for the simulator, unsigned
+        run: >
+          xcodebuild
+          -project ios/App/App.xcodeproj
+          -scheme App
+          -configuration Debug
+          -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          CODE_SIGNING_ALLOWED=NO
+          build
