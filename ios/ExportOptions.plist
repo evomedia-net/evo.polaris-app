@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- evomedia.net evo.polaris-app — https://github.com/evomedia-net/evo.polaris-app
+     Created by Kelly Michels · dev@evomedia.net
+     Licensed under the MIT License. See LICENSE.
+     How ios-release.yml exports the archive: for App Store Connect, uploaded
+     straight to TestFlight, signed automatically. teamID is filled in from the
+     APPLE_TEAM_ID secret at run time. -->
+<plist version="1.0">
+<dict>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>destination</key>
+	<string>upload</string>
+	<key>signingStyle</key>
+	<string>automatic</string>
+	<key>teamID</key>
+	<string>SET_AT_RUN_TIME</string>
+	<key>uploadSymbols</key>
+	<true/>
+	<key>manageAppVersionAndBuildNumber</key>
+	<false/>
+</dict>
+</plist>

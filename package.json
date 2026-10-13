@@ -12,14 +12,15 @@
     "url": "https://github.com/evomedia-net/evo.polaris-app.git"
   },
   "polaris": {
-    "version": "0.0.1.0.61"
+    "version": "0.0.1.0.70"
   },
   "scripts": {
     "test": "node --test \"test/*.test.mjs\"",
     "fetch-site": "node scripts/fetch-site.mjs",
-    "sync": "node scripts/fetch-site.mjs && cap sync",
+    "sync": "node scripts/fetch-site.mjs && node scripts/store-version.mjs --apply && cap sync",
     "docs:twins": "node scripts/md-txt.mjs",
-    "docs:check": "node scripts/md-txt.mjs --check"
+    "docs:check": "node scripts/md-txt.mjs --check",
+    "store-version": "node scripts/store-version.mjs --apply"
   },
   "dependencies": {
     "@capacitor-community/text-to-speech": "8.0.2",

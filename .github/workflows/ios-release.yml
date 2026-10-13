@@ -1,0 +1,93 @@
+# evomedia.net evo.polaris-app — https://github.com/evomedia-net/evo.polaris-app
+# Created by Kelly Michels · dev@evomedia.net
+# Licensed under the MIT License. See LICENSE.
+
+# A signed iOS build, uploaded to TestFlight. Run by hand (Actions -> ios-release
+# -> Run workflow) once the Apple Developer account exists; it does nothing
+# else and never runs on a push.
+#
+# Signing is Xcode's own cloud-managed signing, driven by an App Store Connect
+# API key: Xcode creates and renews the distribution certificate and the
+# provisioning profile itself, so no certificate or profile has to be exported,
+# stored as a secret, or remembered when it expires. Four repo secrets:
+#
+#   APPLE_TEAM_ID          the 10-character Team ID (Membership details)
+#   ASC_KEY_ID             the API key's ID
+#   ASC_ISSUER_ID          the issuer ID shown above the keys list
+#   ASC_KEY_P8_BASE64      the downloaded AuthKey_<ID>.p8, base64-encoded
+#
+# The key needs the Admin role (cloud-managed signing asks for it). The app
+# record for net.evomedia.polaris must exist in App Store Connect first.
+name: ios-release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-release
+  cancel-in-progress: false
+
+jobs:
+  testflight:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    env:
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+    steps:
+      - name: Stop early, naming any secret that is not set
+        run: |
+          missing=""
+          for s in APPLE_TEAM_ID ASC_KEY_ID ASC_ISSUER_ID ASC_KEY_P8_BASE64; do
+            [ -n "${!s}" ] || missing="$missing $s"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Repo secrets not set:$missing -- see the comment at the top of this workflow."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      # The checksummed polaris release, its store numbers, and the native copy.
+      - run: npm run fetch-site
+      - run: node scripts/store-version.mjs --apply
+      - run: npx cap sync ios
+      - name: Put the API key where Xcode looks for it
+        run: |
+          mkdir -p "$RUNNER_TEMP/asc"
+          echo "$ASC_KEY_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+      - name: Archive, signed by Xcode with the API key
+        run: >
+          xcodebuild archive
+          -project ios/App/App.xcodeproj
+          -scheme App
+          -configuration Release
+          -destination 'generic/platform=iOS'
+          -archivePath "$RUNNER_TEMP/App.xcarchive"
+          -allowProvisioningUpdates
+          -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+          -authenticationKeyID "$ASC_KEY_ID"
+          -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+          DEVELOPMENT_TEAM="$APPLE_TEAM_ID"
+          CODE_SIGN_STYLE=Automatic
+      - name: Export and upload to TestFlight
+        run: |
+          plutil -replace teamID -string "$APPLE_TEAM_ID" ios/ExportOptions.plist
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportOptionsPlist ios/ExportOptions.plist \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+      - name: Remove the key from the runner
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/asc"
