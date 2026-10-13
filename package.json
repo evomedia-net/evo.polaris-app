@@ -12,7 +12,7 @@
     "url": "https://github.com/evomedia-net/evo.polaris-app.git"
   },
   "polaris": {
-    "version": "0.0.1.0.61"
+    "version": "0.0.1.0.70"
   },
   "scripts": {
     "test": "node --test \"test/*.test.mjs\"",
