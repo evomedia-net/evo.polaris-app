@@ -1,5 +1,19 @@
 apply plugin: 'com.android.application'
 
+// RELEASE SIGNING, FROM A FILE THAT NEVER ENTERS THE REPO. POLARIS_SIGNING
+// names a properties file -- storeFile, storePassword, keyAlias, keyPassword
+// -- for the upload key, which lives on Kelly's machine and is backed up by
+// him; Play App Signing holds the key that actually signs what phones get.
+// Unset, a release build comes out unsigned, which Play will not take. That
+// is loud on purpose: the alternative is a build signed with whatever key was
+// lying around. The same arrangement as evo.ablecamera's ABLECAMERA_SIGNING.
+def signingProps = null
+def signingPath = System.getenv('POLARIS_SIGNING')
+if (signingPath && new File(signingPath).isFile()) {
+    signingProps = new Properties()
+    new File(signingPath).withInputStream { signingProps.load(it) }
+}
+
 android {
     namespace = "net.evomedia.polaris"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -16,8 +30,22 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        if (signingProps != null) {
+            release {
+                storeFile file(signingProps.getProperty('storeFile'))
+                storePassword signingProps.getProperty('storePassword')
+                keyAlias signingProps.getProperty('keyAlias')
+                keyPassword signingProps.getProperty('keyPassword')
+                // v3 is what lets the key be rotated later, should it ever be
+                // compromised; without it the only way out is a new app.
+                enableV3Signing true
+            }
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.findByName('release')
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
