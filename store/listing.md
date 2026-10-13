@@ -1,0 +1,163 @@
+# Store listing
+
+The words for the Google Play and App Store listings, ready to paste. Each
+field is a heading with the store's character limit in brackets, and its text
+is the block under it; `test/store-listing.test.mjs` fails if a field runs
+over its limit. The screenshots and graphics are in `store/play/` and
+`store/ios/`, with their captions in `store/screenshot-captions.json`.
+
+## Both stores
+
+### Privacy policy URL (2000)
+
+```
+https://polaris.evomedia.net/privacy.html
+```
+
+### Support URL (2000)
+
+```
+https://docs.evomedia.net/polaris/
+```
+
+### Website (2000)
+
+```
+https://polaris.evomedia.net
+```
+
+### Contact email (320)
+
+```
+dev@evomedia.net
+```
+
+## Google Play
+
+### App name (30)
+
+```
+evo.polaris: Sky Guide
+```
+
+### Short description (80)
+
+```
+One tap finds Polaris, the planets, the ISS and galaxies. Free, offline, no ads.
+```
+
+### Full description (4000)
+
+```
+evo.polaris is a free, open-source sky guide and polar-alignment app. One tap finds Polaris, the International Space Station, the planets, 28 constellations and the fifteen brightest galaxies, and it gives you the numbers to align a star tracker or equatorial mount.
+
+Made for every astronomer, including astronomers with physical disabilities, limited fine motor control or low vision. It is made by a disabled astronomer, and everyone else gets an app that is simply easier to use at night.
+
+FIND THINGS IN THE SKY
+• The sky as it is tonight: 9,096 stars, the Milky Way, and constellation artwork you can turn on or off.
+• One tap points you at Polaris, the Moon, the Sun, the ISS, each planet in turn, each constellation and each galaxy.
+• Galaxies are shown as photographs at their true size, and framed when you go to one.
+• Hold the phone up and the sky follows it, or steer with large Up, Down, Left and Right buttons, so you never have to hold the phone to the sky.
+
+ALIGN YOUR MOUNT
+• Your latitude, for the altitude knob, written out in words as well as digits.
+• The compass bearing of true north, with the magnetic declination worked out on your phone.
+• Where to put Polaris on the polar-scope reticle, drawn as a clock dial.
+• Both hemispheres: south of the equator it aims at the south celestial pole.
+
+EASY TO USE, DAY OR NIGHT
+• Single taps only: nothing needs a pinch or a double-tap.
+• Large buttons that stay where they are.
+• Text up to 1.6 times larger, high-contrast colours, and a WCAG Mode built to meet WCAG 2.2 AA.
+• Reads its numbers out loud.
+• Night Mode: pure red on black, to keep your eyes dark-adapted.
+
+PRIVATE AND OFFLINE
+• Works with no signal: everything is worked out on your phone. Only the ISS position, and an optional elevation lookup, use the internet.
+• No account, no ads, no tracking. Your position stays on your phone.
+
+Free and open source: github.com/evomedia-net/evo.polaris
+```
+
+### Category
+
+```
+Education
+```
+
+## App Store
+
+### Name (30)
+
+```
+evo.polaris: Sky Guide
+```
+
+### Subtitle (30)
+
+```
+Polar alignment and sky finder
+```
+
+### Promotional text (170)
+
+```
+Made for every astronomer, including those who can't crouch behind an eyepiece: big buttons, single taps, large text and a red Night Mode. Free, offline, no ads.
+```
+
+### Keywords (100)
+
+```
+astronomy,stargazing,polar alignment,star tracker,polaris,night sky,planets,ISS,galaxy,accessible
+```
+
+### Description (4000)
+
+```
+evo.polaris is a free, open-source sky guide and polar-alignment app. One tap finds Polaris, the International Space Station, the planets, 28 constellations and the fifteen brightest galaxies, and it gives you the numbers to align a star tracker or equatorial mount.
+
+Made for every astronomer, including astronomers with physical disabilities, limited fine motor control or low vision. It is made by a disabled astronomer, and everyone else gets an app that is simply easier to use at night.
+
+FIND THINGS IN THE SKY
+• The sky as it is tonight: 9,096 stars, the Milky Way, and constellation artwork you can turn on or off.
+• One tap points you at Polaris, the Moon, the Sun, the ISS, each planet in turn, each constellation and each galaxy.
+• Galaxies are shown as photographs at their true size, and framed when you go to one.
+• Hold the phone up and the sky follows it, or steer with large Up, Down, Left and Right buttons, so you never have to hold the phone to the sky.
+
+ALIGN YOUR MOUNT
+• Your latitude, for the altitude knob, written out in words as well as digits.
+• The compass bearing of true north, with the magnetic declination worked out on your phone.
+• Where to put Polaris on the polar-scope reticle, drawn as a clock dial.
+• Both hemispheres: south of the equator it aims at the south celestial pole.
+
+EASY TO USE, DAY OR NIGHT
+• Single taps only: nothing needs a pinch or a double-tap.
+• Large buttons that stay where they are.
+• Text up to 1.6 times larger, high-contrast colours, and a WCAG Mode built to meet WCAG 2.2 AA.
+• Reads its numbers out loud.
+• Night Mode: pure red on black, to keep your eyes dark-adapted.
+
+PRIVATE AND OFFLINE
+• Works with no signal: everything is worked out on your phone. Only the ISS position, and an optional elevation lookup, use the internet.
+• No account, no ads, no tracking. Your position stays on your phone.
+
+Free and open source: github.com/evomedia-net/evo.polaris
+```
+
+### Primary category
+
+```
+Education
+```
+
+### Secondary category
+
+```
+Utilities
+```
+
+### Age rating
+
+```
+4+ (no objectionable content)
+```
