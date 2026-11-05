@@ -6,6 +6,11 @@
 # release is fetched and checked, copied into the project, and compiled into
 # a debug APK, kept as a download on the run. Unsigned: store builds are
 # signed with the upload key, which never leaves Kelly's machine.
+#
+# Then the appium job installs that same APK on an Android emulator and runs
+# the end-to-end suite in e2e/ through Appium's UiAutomator2 driver: Android's
+# own permission dialog, the system bars in full screen, turning the phone,
+# the speech shim, and the accessibility tree TalkBack reads.
 name: android
 
 on:
@@ -43,4 +48,49 @@ jobs:
         with:
           name: evo.polaris-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 14
+
+  appium:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: evo.polaris-debug-apk
+          path: apk
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+        working-directory: e2e
+      - run: python -m pip install -r e2e/requirements.txt
+      # The emulator needs hardware virtualisation, which the runner has but
+      # does not open to the user by default.
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@c9c93e6ba9c4194322e114c40970d5983d9a07cc # v2.38.0
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: bash e2e/run-ci.sh apk/app-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: appium-results
+          path: e2e/artifacts/
           retention-days: 14

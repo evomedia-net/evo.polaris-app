@@ -150,6 +150,63 @@ The tests cover:
   alpha channel;
 - that every prose document has a plain-text twin in sync.
 
+### End to end on Android, with Appium
+
+`e2e/` drives the real debug APK on an Android emulator through Appium and its
+UiAutomator2 driver, with pytest. polaris's own suite already tests the page in
+a browser, so these tests cover what only the phone can show:
+
+- the app opens on the page bundled inside it, served from `https://localhost`
+  and not the network;
+- **Use my location** raises Android's own permission dialog, and once it is
+  allowed, the emulator's GPS position reaches the page;
+- **Read these out loud** goes to the phone's speech engine instead of
+  reporting that there is none;
+- full screen really hides the status and navigation bars, read from Android's
+  window manager, and leaving full screen brings them back;
+- turning the phone sideways fills the screen with the sky, and turning it back
+  undoes it;
+- accessibility, in the tree Android hands to TalkBack:
+  - every control has a name (WCAG 4.1.2);
+  - every button and every control with an id is at least 24 by 24 dp
+    (WCAG 2.5.8);
+  - at Android's largest system font size, the page never scrolls sideways
+    (WCAG 1.4.4 and 1.4.10).
+
+The sweep covers each screen with every card open, the location form, and the
+sky picture's own controls in full screen.
+
+A known polaris bug is recorded as a strict expected failure: the position
+readout shows a minus sign and a hemisphere together (evo.polaris#300). Once
+polaris fixes it and this repository bundles that release, the test passes, and
+because the marker is strict that turns the run red until the marker is removed.
+
+In CI, the `appium` job in `.github/workflows/android.yml` runs on every pull
+request. It takes the APK the `build` job made, boots an Android 16 emulator,
+and uploads `e2e/artifacts/` from every run: the JUnit report and Appium's log,
+plus a screenshot and the native tree for any failure.
+
+To run the suite on your own machine, you need:
+
+- an emulator or device that `adb devices` lists;
+- `JAVA_HOME` set, because Appium checks the APK's signature with Java's tools;
+- the debug APK from `./gradlew assembleDebug` in `android/`.
+
+Then:
+
+```
+cd e2e
+npm ci
+python -m venv .venv
+.venv/bin/pip install -r requirements.txt    # .venv\Scripts\pip on Windows
+cd ..
+PATH="$PWD/e2e/.venv/bin:$PATH" bash e2e/run-ci.sh android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+`run-ci.sh` starts Appium, runs pytest, and stops Appium again. It refuses to
+start if something is already answering on port 4723, because that server would
+run the tests with its own environment.
+
 ## Licence
 
 MIT. See [LICENSE](LICENSE). polaris's bundled data and pictures keep their

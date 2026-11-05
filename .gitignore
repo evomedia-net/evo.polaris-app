@@ -20,3 +20,6 @@ ios/DerivedData/
 *.keystore
 *.jks
 signing.properties
+# The Appium suite's Python environment and its run output.
+e2e/.venv/
+e2e/artifacts/
