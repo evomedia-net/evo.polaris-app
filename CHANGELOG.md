@@ -10,6 +10,7 @@ and the release moves them under its version.
 
 ### Added
 
+- **e2e:** Appium end-to-end tests of the Android app on an emulator, in CI on every pull request: Android's location-permission dialog, the speech shim, the system bars in full screen, turning the phone, and WCAG checks in the accessibility tree TalkBack reads ([#5](https://github.com/evomedia-net/evo.polaris-app/pull/5))
 - **store:** app icons, screenshots and listing text, store version numbers, Android release signing and a TestFlight upload ([#3](https://github.com/evomedia-net/evo.polaris-app/pull/3))
 - bundle the released polaris in a Capacitor shell for Google Play and the App Store ([#1](https://github.com/evomedia-net/evo.polaris-app/pull/1))
 

@@ -1,0 +1,14 @@
+{
+  "name": "evo-polaris-app-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Appium server and its UiAutomator2 driver for the Android end-to-end tests, kept apart from the app so its own npm ci stays small. Appium treats this folder as its home because appium is a dependency here, so the driver below is the one it loads.",
+  "license": "MIT",
+  "scripts": {
+    "appium": "appium --port 4723 --allow-insecure uiautomator2:chromedriver_autodownload --log-timestamp --log-no-colors"
+  },
+  "devDependencies": {
+    "appium": "3.9.0",
+    "appium-uiautomator2-driver": "8.7.3"
+  }
+}
