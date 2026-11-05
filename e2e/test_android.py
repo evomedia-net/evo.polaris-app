@@ -12,9 +12,11 @@ asked for the permission. Every later test sets up the position it needs.
 from __future__ import annotations
 
 import re
+import time
 
 import pytest
 from appium.webdriver.common.appiumby import AppiumBy
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 
 from conftest import PACKAGE, adb, by_id, choose_mode, place_by_hand, tap, text_of, wait, web
@@ -33,13 +35,33 @@ def test_opens_on_the_page_bundled_inside_the_app(driver):
         assert driver.execute_script("return location.origin") == "https://localhost"
 
 
+def _press_until_gone(drv, resource_id: str, seconds: float = 20) -> None:
+    """Press a system dialog's button until the dialog has actually closed.
+
+    On the CI emulator, with animations off, a tap that landed a moment after
+    the permission dialog appeared was reported as clicked and the dialog
+    stayed open. A person would press again, so the test does too.
+    """
+    deadline = time.monotonic() + seconds
+    while time.monotonic() < deadline:
+        buttons = drv.find_elements(AppiumBy.ID, resource_id)
+        if not buttons:
+            return
+        try:
+            buttons[0].click()
+        except StaleElementReferenceException:
+            pass
+        time.sleep(1)
+    raise AssertionError(f"{resource_id} was still on screen after {seconds} s of pressing it")
+
+
 def test_location_comes_through_androids_own_permission_dialog(driver):
     driver.set_location(29.7604, -95.3698, 15)  # the emulator's GPS
     with web(driver):
         tap(driver, "locateBtn")
     # The prompt is Android's, not the page's: no browser test can press it.
     wait(driver, 30).until(lambda d: d.find_elements(AppiumBy.ID, ALLOW_WHILE_IN_USE))
-    driver.find_element(AppiumBy.ID, ALLOW_WHILE_IN_USE).click()
+    _press_until_gone(driver, ALLOW_WHILE_IN_USE)
     driver.set_location(29.7604, -95.3698, 15)  # a fresh fix once the app may read it
     with web(driver):
         wait(driver, 45).until(lambda d: text_of(d, "outLat").startswith("29.76"))

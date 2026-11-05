@@ -185,7 +185,10 @@ because the marker is strict that turns the run red until the marker is removed.
 In CI, the appium job in .github/workflows/android.yml runs on every pull
 request. It takes the APK the build job made, boots an Android 16 emulator,
 and uploads e2e/artifacts/ from every run: the JUnit report and Appium's log,
-plus a screenshot and the native tree for any failure.
+plus a screenshot and the native tree for any failure. The emulator keeps its
+default screen, 320 by 640 dp. That is narrower than most phones, and 320 is
+the width WCAG's reflow criterion is written for, so the largest-font test runs
+at its hardest there.
 
 To run the suite on your own machine, you need:
 
