@@ -17,6 +17,11 @@ Added
 - store: app icons, screenshots and listing text, store version numbers, Android release signing and a TestFlight upload (#3 (https://github.com/evomedia-net/evo.polaris-app/pull/3))
 - bundle the released polaris in a Capacitor shell for Google Play and the App Store (#1 (https://github.com/evomedia-net/evo.polaris-app/pull/1))
 
+Changed
+~~~~~~~
+
+- e2e: e2e/package.json lists Appium's install script, pinned to its version. npm 12, which the workstation now runs, runs a dependency's install script only if allowScripts in package.json lists it. The script installs extra drivers only when an install asks for them with --drivers, and the UiAutomator2 driver is already a dependency here, so the approval keeps installs as they were under npm 11 (#6 (https://github.com/evomedia-net/evo.polaris-app/pull/6))
+
 Maintenance
 ~~~~~~~~~~~
 

@@ -10,5 +10,8 @@
   "devDependencies": {
     "appium": "3.9.0",
     "appium-uiautomator2-driver": "8.7.3"
+  },
+  "allowScripts": {
+    "appium@3.9.0": true
   }
 }
